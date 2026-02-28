@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = "https://splash-shine-api.onrender.com";
+
 const AdminLoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,22 +18,19 @@ const AdminLoginPage = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:8000/admin/login", {
+      const res = await axios.post(`${API_URL}/admin/login`, {
         email,
         password,
       });
 
-      console.log("Login response:", res.data);
-
       localStorage.setItem("admin_id", res.data.admin_id);
       localStorage.setItem("admin_name", res.data.name);
       localStorage.setItem("admin_email", res.data.email);
-      
+
       setLoading(false);
       navigate("/admin/dashboard");
     } catch (err) {
       setLoading(false);
-      console.error("Login error:", err.response?.data || err.message);
       setError(err.response?.data?.detail || "Invalid email or password. Please try again.");
     }
   };
@@ -39,8 +38,8 @@ const AdminLoginPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
-        
-        {/* Logo/Header */}
+
+        {/* Header */}
         <div className="text-center mb-8">
           <div className="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,12 +64,10 @@ const AdminLoginPage = () => {
 
         {/* Login Form */}
         <form onSubmit={login} className="space-y-5">
-          
+
           {/* Email Input */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Email Address
-            </label>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,9 +87,7 @@ const AdminLoginPage = () => {
 
           {/* Password Input */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Password
-            </label>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Password</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,17 +119,6 @@ const AdminLoginPage = () => {
                 )}
               </button>
             </div>
-          </div>
-
-          {/* Remember Me & Forgot Password */}
-          <div className="flex items-center justify-between">
-            <label className="flex items-center">
-              <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-              <span className="ml-2 text-sm text-gray-600">Remember me</span>
-            </label>
-            <a href="#" className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
-              Forgot password?
-            </a>
           </div>
 
           {/* Login Button */}

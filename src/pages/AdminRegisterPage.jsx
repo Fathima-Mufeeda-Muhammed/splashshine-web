@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
+const API_URL = "https://splash-shine-api.onrender.com";
 
 function AdminRegisterPage() {
   const navigate = useNavigate();
@@ -18,7 +21,6 @@ function AdminRegisterPage() {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    // Clear error when user types
     if (errors[e.target.name]) {
       setErrors({ ...errors, [e.target.name]: "" });
     }
@@ -63,26 +65,26 @@ function AdminRegisterPage() {
     setLoading(true);
 
     try {
-      // Simulated API call - replace with actual axios call
-      // const res = await axios.post("http://localhost:8000/admin/register", form);
-      
-      setTimeout(() => {
-        setLoading(false);
-        alert("✅ Admin Registered Successfully!");
-        navigate("/admin/login");
-      }, 1000);
-      
+      await axios.post(`${API_URL}/admin/register`, {
+        name: form.name,
+        email: form.email,
+        password: form.password,
+      });
+
+      setLoading(false);
+      alert("✅ Admin Registered Successfully!");
+      navigate("/admin/login");
     } catch (err) {
       setLoading(false);
-      setErrors({ submit: err.response?.data?.message || "Registration failed!" });
+      setErrors({ submit: err.response?.data?.detail || "Registration failed! Please try again." });
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
-        
-        {/* Logo/Header */}
+
+        {/* Header */}
         <div className="text-center mb-8">
           <div className="bg-indigo-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,13 +108,11 @@ function AdminRegisterPage() {
         )}
 
         {/* Register Form */}
-        <div className="space-y-5">
-          
+        <form onSubmit={handleSubmit} className="space-y-5">
+
           {/* Name Input */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Full Name
-            </label>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,9 +125,7 @@ function AdminRegisterPage() {
                 placeholder="John Doe"
                 value={form.name}
                 onChange={handleChange}
-                className={`w-full pl-10 pr-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition ${
-                  errors.name ? 'border-red-500' : 'border-gray-200 focus:border-indigo-500'
-                }`}
+                className={`w-full pl-10 pr-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition ${errors.name ? 'border-red-500' : 'border-gray-200 focus:border-indigo-500'}`}
               />
             </div>
             {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
@@ -135,9 +133,7 @@ function AdminRegisterPage() {
 
           {/* Email Input */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Email Address
-            </label>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,9 +146,7 @@ function AdminRegisterPage() {
                 placeholder="admin@example.com"
                 value={form.email}
                 onChange={handleChange}
-                className={`w-full pl-10 pr-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition ${
-                  errors.email ? 'border-red-500' : 'border-gray-200 focus:border-indigo-500'
-                }`}
+                className={`w-full pl-10 pr-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition ${errors.email ? 'border-red-500' : 'border-gray-200 focus:border-indigo-500'}`}
               />
             </div>
             {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
@@ -160,9 +154,7 @@ function AdminRegisterPage() {
 
           {/* Password Input */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Password
-            </label>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Password</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -175,15 +167,9 @@ function AdminRegisterPage() {
                 placeholder="Create a password"
                 value={form.password}
                 onChange={handleChange}
-                className={`w-full pl-10 pr-12 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition ${
-                  errors.password ? 'border-red-500' : 'border-gray-200 focus:border-indigo-500'
-                }`}
+                className={`w-full pl-10 pr-12 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition ${errors.password ? 'border-red-500' : 'border-gray-200 focus:border-indigo-500'}`}
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-              >
+              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 pr-3 flex items-center">
                 {showPassword ? (
                   <svg className="w-5 h-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
@@ -201,9 +187,7 @@ function AdminRegisterPage() {
 
           {/* Confirm Password Input */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Confirm Password
-            </label>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Confirm Password</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -216,15 +200,9 @@ function AdminRegisterPage() {
                 placeholder="Confirm your password"
                 value={form.confirmPassword}
                 onChange={handleChange}
-                className={`w-full pl-10 pr-12 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition ${
-                  errors.confirmPassword ? 'border-red-500' : 'border-gray-200 focus:border-indigo-500'
-                }`}
+                className={`w-full pl-10 pr-12 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition ${errors.confirmPassword ? 'border-red-500' : 'border-gray-200 focus:border-indigo-500'}`}
               />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-              >
+              <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute inset-y-0 right-0 pr-3 flex items-center">
                 {showConfirmPassword ? (
                   <svg className="w-5 h-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
@@ -240,20 +218,9 @@ function AdminRegisterPage() {
             {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
           </div>
 
-          {/* Terms & Conditions */}
-          <div className="flex items-start">
-            <input type="checkbox" className="w-4 h-4 mt-1 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" required />
-            <label className="ml-2 text-sm text-gray-600">
-              I agree to the{" "}
-              <a href="#" className="text-indigo-600 hover:text-indigo-700 font-semibold">
-                Terms & Conditions
-              </a>
-            </label>
-          </div>
-
           {/* Register Button */}
           <button
-            onClick={handleSubmit}
+            type="submit"
             disabled={loading}
             className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -269,7 +236,7 @@ function AdminRegisterPage() {
               "Create Admin Account"
             )}
           </button>
-        </div>
+        </form>
 
         {/* Login Link */}
         <div className="mt-6 text-center">
@@ -284,7 +251,18 @@ function AdminRegisterPage() {
           </p>
         </div>
 
-       
+        {/* Back to Home */}
+        <div className="mt-4 text-center">
+          <button
+            onClick={() => navigate("/")}
+            className="text-gray-500 hover:text-gray-700 text-sm flex items-center justify-center mx-auto"
+          >
+            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Home
+          </button>
+        </div>
       </div>
     </div>
   );
