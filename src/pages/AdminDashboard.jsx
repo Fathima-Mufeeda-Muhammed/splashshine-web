@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import logo from "../assets/logo.png";
 
+const API_URL = "https://splash-shine-api.onrender.com";
+
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [adminName, setAdminName] = useState("");
@@ -14,6 +16,7 @@ const AdminDashboard = () => {
     pendingPayments: 0
   });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const name = localStorage.getItem("admin_name") || "Admin";
@@ -24,24 +27,21 @@ const AdminDashboard = () => {
   const fetchDashboardStats = async () => {
     try {
       setLoading(true);
-      
-      // Fetch all data in parallel
+      setError(null);
       const [usersRes, bookingsRes, paymentsRes] = await Promise.all([
-        axios.get("http://localhost:8000/admin/users"),
-        axios.get("http://localhost:8000/admin/bookings"),
-        axios.get("http://localhost:8000/admin/payments")
+        axios.get(`${API_URL}/admin/users`),
+        axios.get(`${API_URL}/admin/bookings`),
+        axios.get(`${API_URL}/admin/payments`)
       ]);
 
       const users = usersRes.data.users || [];
       const bookings = bookingsRes.data.bookings || [];
       const payments = paymentsRes.data.payments || [];
 
-      // Calculate total revenue from approved payments
       const totalRevenue = payments
         .filter(p => p.status === 'approved')
         .reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
 
-      // Count pending payments
       const pendingPayments = payments.filter(p => p.status === 'pending').length;
 
       setStats({
@@ -52,6 +52,7 @@ const AdminDashboard = () => {
       });
     } catch (error) {
       console.error("Error fetching dashboard stats:", error);
+      setError("Failed to load dashboard. The server may be waking up, please wait a moment and refresh.");
     } finally {
       setLoading(false);
     }
@@ -108,18 +109,11 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-
       {/* Navbar */}
       <nav className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-
-          {/* Logo */}
           <div className="flex items-center space-x-3">
-            <img 
-              src={logo} 
-              alt="Splash Shine" 
-              className="h-12 w-auto"
-            />
+            <img src={logo} alt="Splash Shine" className="h-12 w-auto" />
             <div className="hidden sm:block">
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 Splash Shine
@@ -128,11 +122,10 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* Profile Dropdown */}
           <div className="relative">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-5 py-2.5 rounded-xl transition-all shadow-md hover:shadow-lg"
+              className="flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-5 py-2.5 rounded-xl transition-all shadow-md"
             >
               <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center">
                 <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent font-bold text-lg">
@@ -145,7 +138,6 @@ const AdminDashboard = () => {
               </svg>
             </button>
 
-            {/* Dropdown Menu */}
             {dropdownOpen && (
               <div className="absolute right-0 mt-3 w-48 bg-white shadow-xl rounded-xl border border-gray-100 p-2 z-50">
                 <button
@@ -165,57 +157,59 @@ const AdminDashboard = () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        
-        {/* Welcome Section */}
         <div className="mb-12">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            Welcome back, {adminName}! 👋
-          </h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">Welcome back, {adminName}! 👋</h1>
           <p className="text-gray-600">Here's what's happening with your business today.</p>
         </div>
 
-        {/* Cards Grid */}
+        {/* Error Banner */}
+        {error && (
+          <div className="bg-yellow-50 border border-yellow-300 text-yellow-800 px-6 py-4 rounded-xl mb-6 flex items-center justify-between">
+            <div className="flex items-center">
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {error}
+            </div>
+            <button
+              onClick={fetchDashboardStats}
+              className="bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-700"
+            >
+              Retry
+            </button>
+          </div>
+        )}
+
         {loading ? (
-          <div className="text-center py-10">Loading dashboard...</div>
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading dashboard... (Server may be waking up, please wait)</p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {cards.map((card, index) => (
               <Link
                 key={index}
                 to={card.link}
-                className="group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 p-6 border border-gray-100 hover:border-gray-200 hover:-translate-y-1"
+                className="group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 p-6 border border-gray-100 hover:-translate-y-1"
               >
-                {/* Icon */}
                 <div className={`inline-flex p-4 rounded-xl ${card.iconBg} ${card.iconColor} mb-4 group-hover:scale-110 transition-transform duration-300`}>
                   {card.icon}
                 </div>
-
-                {/* Content */}
-                <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-gray-900">
-                  {card.title}
-                </h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  {card.description}
-                </p>
-
-                {/* Action Button */}
+                <h3 className="text-xl font-bold text-gray-800 mb-2">{card.title}</h3>
+                <p className="text-gray-600 text-sm mb-4">{card.description}</p>
                 <div className="flex items-center space-x-2 text-sm font-semibold">
-                  <span className={`bg-gradient-to-r ${card.gradient} bg-clip-text text-transparent`}>
-                    View All
-                  </span>
+                  <span className={`bg-gradient-to-r ${card.gradient} bg-clip-text text-transparent`}>View All</span>
                   <svg className={`w-4 h-4 ${card.iconColor} group-hover:translate-x-1 transition-transform`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
-
-                {/* Decorative gradient overlay */}
-                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-5 rounded-full blur-3xl transition-opacity duration-500`}></div>
               </Link>
             ))}
           </div>
         )}
 
-        {/* Quick Stats Section */}
+        {/* Quick Stats */}
         <div className="mt-12 bg-white rounded-2xl shadow-md p-8 border border-gray-100">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Quick Overview</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
