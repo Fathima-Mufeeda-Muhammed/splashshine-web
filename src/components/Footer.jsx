@@ -8,7 +8,6 @@ const Footer = () => {
 
         {/* Logo + About */}
         <div>
-          {/* Logo with white background for better visibility */}
           <div className="bg-white p-2 rounded-lg inline-block mb-3 shadow-md">
             <img
               src={logo}
@@ -16,7 +15,6 @@ const Footer = () => {
               alt="Splash Shine Solution Logo"
             />
           </div>
-
           <h3 className="text-lg font-semibold mb-2">Splash Shine Solution</h3>
           <p className="text-sm opacity-80 leading-relaxed">
             Your trusted partner for premium cleaning, car wash, and moving services.
@@ -38,9 +36,10 @@ const Footer = () => {
         {/* Contact */}
         <div>
           <h3 className="text-lg font-semibold mb-3">Contact Us</h3>
-          <p className="text-sm opacity-80 mb-2">📍 Kerala, India</p>
-          <p className="text-sm opacity-80 mb-2">📞 +91 98765 43210</p>
-          <p className="text-sm opacity-80">✉️ support@splashshinesolution.com</p>
+          <p className="text-sm opacity-80 mb-2">📍 Kanhangad, Kasaragod, Kerala</p>
+          <p className="text-sm opacity-80 mb-2">📞 +91 8590717424</p>
+          <p className="text-sm opacity-80 mb-2">📞 +91 8137070424</p>
+          <p className="text-sm opacity-80">✉️ splashshinesolutions@gmail.com</p>
         </div>
 
       </div>
