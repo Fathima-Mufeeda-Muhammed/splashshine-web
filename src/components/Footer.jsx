@@ -17,8 +17,7 @@ const Footer = () => {
           </div>
           <h3 className="text-lg font-semibold mb-2">Splash Shine Solution</h3>
           <p className="text-sm opacity-80 leading-relaxed">
-            Your trusted partner for premium cleaning, car wash, and moving services.
-            We ensure quality, professionalism, and customer satisfaction.
+            Your trusted partner for premium cleaning, car wash, and moving services — delivering quality, professionalism, and complete customer satisfaction.
           </p>
         </div>
 
