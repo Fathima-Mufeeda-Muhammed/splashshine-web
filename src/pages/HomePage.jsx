@@ -146,7 +146,7 @@ const HomePage = () => {
                 Splash Shine Solution
               </h1>
               <p className="text-xs mt-1 text-blue-200 font-light">
-                Professional Cleaning & Moving Solutions
+                Reliable Cleaning & Moving Experts for Homes and Offices
               </p>
             </div>
 
@@ -209,10 +209,10 @@ const HomePage = () => {
       {/* Hero Text Section */}
       <div className="max-w-7xl mx-auto px-6 py-12 md:py-16 text-center animate-[fadeInUp_1s_ease-out]">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 via-cyan-500 to-green-600 bg-clip-text text-transparent">
-          Experience Professional Cleaning
+          Experience the Difference of Professional Cleaning
         </h2>
         <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-          Premium cleaning, car wash, and moving services delivered right to your doorstep
+Premium home cleaning, car wash, and relocation services — convenient, reliable, and delivered to your doorstep.
         </p>
       </div>
 
@@ -245,7 +245,7 @@ const HomePage = () => {
               <h3 className="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
                 Residential Cleaning
               </h3>
-              <p className="text-sm text-gray-600 mt-2 mb-4">Professional home cleaning services</p>
+              <p className="text-sm text-gray-600 mt-2 mb-4">Thorough home cleaning for a spotless and healthy living space.</p>
               <button
                 onClick={() => navigate("/booking?type=residential")}
                 className="w-full py-2.5 bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-lg font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden group/btn">
@@ -271,7 +271,7 @@ const HomePage = () => {
               <h3 className="text-xl font-bold text-gray-800 group-hover:text-green-600 transition-colors duration-300">
                 Commercial Cleaning
               </h3>
-              <p className="text-sm text-gray-600 mt-2 mb-4">Complete business cleaning solutions</p>
+              <p className="text-sm text-gray-600 mt-2 mb-4">Reliable cleaning solutions for offices and commercial spaces.</p>
               <button
                 onClick={() => navigate("/booking?type=commercial")}
                 className="w-full py-2.5 bg-gradient-to-r from-green-500 to-emerald-400 text-white rounded-lg font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden group/btn"
@@ -298,7 +298,7 @@ const HomePage = () => {
               <h3 className="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
                 Mobile Car Wash
               </h3>
-              <p className="text-sm text-gray-600 mt-2 mb-4">Premium car wash at your doorstep</p>
+              <p className="text-sm text-gray-600 mt-2 mb-4">Professional car wash services delivered to your doorstep.</p>
               <button
                 onClick={() => navigate("/booking/mobile-car-wash")}
                 className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-blue-400 text-white rounded-lg font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden group/btn"
@@ -323,9 +323,8 @@ const HomePage = () => {
                 </div>
               </div>
               <h3 className="text-xl font-bold text-gray-800 group-hover:text-teal-600 transition-colors duration-300">
-                Packers & Movers
-              </h3>
-              <p className="text-sm text-gray-600 mt-2 mb-4">Safe and reliable moving services</p>
+Relocation Services              </h3>
+              <p className="text-sm text-gray-600 mt-2 mb-4">Safe, efficient packing and moving with complete care.</p>
               <button 
                 onClick={() => navigate("/packers-movers")}
                 className="w-full py-2.5 bg-gradient-to-r from-teal-500 to-cyan-400 text-white rounded-lg font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden group/btn">
