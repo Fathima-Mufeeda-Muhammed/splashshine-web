@@ -119,7 +119,7 @@ const HomePage = () => {
         <div className="absolute inset-0 bg-white/10 animate-pulse"></div>
         <div className="relative z-10 flex items-center justify-center gap-2">
           <span className="text-lg">✨</span>
-          Welcome to our cleaning services platform
+          Premium Cleaning & Moving Services at Your Doorstep
           <span className="text-lg">✨</span>
         </div>
       </div>
